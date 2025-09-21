@@ -6,7 +6,7 @@ import {
     LayoutDashboard, BookCopy, Radio, Users, Settings, LogOut, 
     ChevronDown, FolderKanban, Video, Music, BookText, X
 } from 'lucide-react';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/Home 1.png';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface SidebarProps {
@@ -134,3 +134,4 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen, toggleSidebar }) => {
 };
 
 export default Sidebar;
+
