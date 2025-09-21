@@ -6,7 +6,7 @@ import {
     LayoutDashboard, BookCopy, Radio, Users, CreditCard, Settings, LogOut, 
     ChevronDown, FolderKanban, Video, Music, BookText, Home, TrendingUp
 } from 'lucide-react';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/Home 1.png';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Sidebar: React.FC = () => {
@@ -218,5 +218,6 @@ const Sidebar: React.FC = () => {
         </motion.aside>
     );
 };
+
 
 export default Sidebar;
