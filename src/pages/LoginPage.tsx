@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAppDispatch, useAppSelector } from '../hooks/typedHooks';
 import { loginAdmin } from '../features/auth/authSlice';
-import logo from '../assets/logo.png';
+import logo from "@/assets/Home 1.png";
 import mandalaPattern from '../assets/mandala-pattern.png';
 import { AtSign, Phone, Lock } from 'lucide-react';
 
