@@ -4,7 +4,7 @@ import { useAppDispatch } from '../../hooks/typedHooks';
 import { logout } from '../../features/auth/authSlice';
 import { LayoutDashboard, BookCopy, Radio, User, CreditCard, LogOut, X } from 'lucide-react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/Home 1.png';
 
 interface SidebarProps {
     isSidebarOpen: boolean;
