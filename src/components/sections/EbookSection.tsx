@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { SpiritualButton } from "@/components/ui/spiritual-button";
 import { SpiritualCard, SpiritualCardHeader, SpiritualCardTitle, SpiritualCardContent } from "@/components/ui/spiritual-card";
 import { Check, Download, Book, Sparkles } from "lucide-react";
-import sacredEbook from "@/assets/sacred-ebook.jpg";
+import sacredEbook from "@/assets/Home 2.png";
 import { Link } from "react-router-dom"; // react-router-dom से Link import करें
 
 export const EbookSection = () => {
@@ -211,3 +211,4 @@ export const EbookSection = () => {
     </section>
   );
 };
+
