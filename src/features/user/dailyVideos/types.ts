@@ -1,16 +1,14 @@
-// src/features/user/dailyVideos/types.ts
-
 export interface DailyVideo {
     _id: string;
     title: string;
     description: string;
     videoFileUrl: string;
-    sequenceOrder: number;
+    scheduledUnlockTime: string;
+    unlocksOn: string;
 }
 
 export interface DailyVideoState {
     videos: DailyVideo[];
-    totalUnlocked: number;
     isLoading: boolean;
     error: string | null;
 }
