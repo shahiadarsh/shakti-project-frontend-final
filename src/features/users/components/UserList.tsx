@@ -17,7 +17,8 @@ const UserList: React.FC<UserListProps> = ({ users, onEdit, onDelete }) => (
                     <th className="p-4 font-semibold text-text-secondary">Name</th>
                     <th className="p-4 font-semibold text-text-secondary">Contact</th>
                     <th className="p-4 font-semibold text-text-secondary">Role</th>
-                    <th className="p-4 font-semibold text-text-secondary">Subscription</th>
+                    <th className="p-4 font-semibold text-text-secondary">Plan</th>
+                    <th className="p-4 font-semibold text-text-secondary">Status</th>
                     <th className="p-4 font-semibold text-text-secondary text-right">Actions</th>
                 </tr>
             </thead>
@@ -27,6 +28,7 @@ const UserList: React.FC<UserListProps> = ({ users, onEdit, onDelete }) => (
                         <td className="p-4 font-medium text-text-primary">{user.name}</td>
                         <td className="p-4 text-text-secondary text-sm">{user.email}<br/>{user.mobileNumber}</td>
                         <td className="p-4"><span className={`px-3 py-1 text-xs font-semibold rounded-full ${user.role === 'ADMIN' ? 'bg-admin-primary/20 text-admin-primary' : 'bg-gray-500/20 text-gray-400'}`}>{user.role}</span></td>
+                        <td className="p-4 text-text-secondary text-sm">{user.currentPlan?.planName || 'N/A'}</td>
                         <td className="p-4 text-sm"><span className={`px-3 py-1 text-xs font-semibold rounded-full ${user.subscriptionStatus === 'ACTIVE' ? 'bg-success-color/20 text-success-color' : 'bg-warning-color/20 text-warning-color'}`}>{user.subscriptionStatus}</span></td>
                         <td className="p-4 flex justify-end items-center gap-2">
                             <button onClick={() => onEdit(user)} className="p-2 text-text-secondary hover:text-admin-primary"><Edit size={18} /></button>
