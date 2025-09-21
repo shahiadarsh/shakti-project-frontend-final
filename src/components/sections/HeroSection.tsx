@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { SpiritualButton } from "@/components/ui/spiritual-button";
 import { SpiritualCard } from "@/components/ui/spiritual-card";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/Home 1.png";
 import mandalaPattern from "@/assets/mandala-pattern.png";
 import { useNavigate } from "react-router-dom"; 
 
@@ -152,3 +152,4 @@ export const HeroSection = () => {
     </section>
   );
 };
+
