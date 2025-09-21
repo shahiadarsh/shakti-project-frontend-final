@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../app/api';
-import { User, UserState, NewUserData, UpdateUserData } from './types';
+import { User, UserState, NewUserData, UpdateUserData, Plan } from './types';
 
 export const fetchUsers = createAsyncThunk('users/fetchAll', async (_, { rejectWithValue }) => {
     try {
@@ -8,6 +8,16 @@ export const fetchUsers = createAsyncThunk('users/fetchAll', async (_, { rejectW
         return data.users;
     } catch (error: any) { return rejectWithValue('Failed to fetch users.'); }
 });
+
+export const fetchSubscriptionPlans = createAsyncThunk('users/fetchPlans', async (_, { rejectWithValue }) => {
+    try {
+        const { data } = await api.get<{ plans: Plan[] }>('/admin/subscription-plans');
+        return data.plans;
+    } catch (error: any) {
+        return rejectWithValue('Failed to fetch subscription plans.');
+    }
+});
+
 
 export const addUser = createAsyncThunk('users/add', async (userData: NewUserData, { rejectWithValue }) => {
     try {
@@ -32,6 +42,7 @@ export const deleteUser = createAsyncThunk('users/delete', async (userId: string
 
 const initialState: UserState = {
     users: [],
+    subscriptionPlans: [],
     isLoading: false,
     error: null,
 };
@@ -50,6 +61,9 @@ const userSlice = createSlice({
             .addCase(fetchUsers.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload as string;
+            })
+            .addCase(fetchSubscriptionPlans.fulfilled, (state, action) => {
+                state.subscriptionPlans = action.payload;
             })
             .addCase(addUser.fulfilled, (state, action) => {
                 state.users.unshift(action.payload);
