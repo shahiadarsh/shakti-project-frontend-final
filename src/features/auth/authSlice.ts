@@ -10,6 +10,7 @@ interface LoginResponse {
 }
 
 interface LoginCredentials {
+    name: string;
     email: string;
     mobileNumber: string;
 }
@@ -39,10 +40,6 @@ export const loginAdmin = createAsyncThunk<
         try {
             const { data } = await api.post<LoginResponse>('/auth/login', credentials);
             
-            // if (data.user.role !== 'ADMIN') {
-            //     return rejectWithValue('Access Denied: You must be an administrator.');
-            // }
-
             localStorage.setItem('user', JSON.stringify(data.user));
             localStorage.setItem('token', data.accessToken);
             
