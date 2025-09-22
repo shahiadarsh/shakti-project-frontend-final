@@ -4,6 +4,7 @@ import { DailyVideo, DailyVideoState } from './types';
 
 interface FetchResponse {
     videos: DailyVideo[];
+    totalVideosUnlocked: number;
 }
 
 export const fetchDailyVideos = createAsyncThunk<FetchResponse, void, { rejectValue: string }>(
@@ -20,6 +21,7 @@ export const fetchDailyVideos = createAsyncThunk<FetchResponse, void, { rejectVa
 
 const initialState: DailyVideoState = {
     videos: [],
+    totalUnlocked: 0,
     isLoading: true,
     error: null,
 };
@@ -36,6 +38,7 @@ const dailyVideoSlice = createSlice({
             .addCase(fetchDailyVideos.fulfilled, (state, action: PayloadAction<FetchResponse>) => {
                 state.isLoading = false;
                 state.videos = action.payload.videos;
+                state.totalUnlocked = action.payload.totalVideosUnlocked;
             })
             .addCase(fetchDailyVideos.rejected, (state, action) => {
                 state.isLoading = false;
