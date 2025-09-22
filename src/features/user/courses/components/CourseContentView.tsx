@@ -1,105 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState } from 'react';
 import { FullCourse, ContentItem } from '../types';
-import { Video, Music, BookText, PlayCircle, Loader2, AlertTriangle } from 'lucide-react';
-import { Document, Page, pdfjs } from 'react-pdf';
-import axios from 'axios';
-
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-import 'react-pdf/dist/Page/TextLayer.css';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
-
-const PdfViewer: React.FC<{ fileUrl: string }> = ({ fileUrl }) => {
-    const [numPages, setNumPages] = useState<number | null>(null);
-    const [pdfData, setPdfData] = useState<Blob | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [containerWidth, setContainerWidth] = useState<number>(0);
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const fetchPdfWithProxy = async () => {
-            setIsLoading(true);
-            setError(null);
-            setPdfData(null);
-            
-            const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-            const proxiedFileUrl = `${proxyUrl}${fileUrl}`;
-
-            try {
-                const response = await axios.get(proxiedFileUrl, { 
-                    responseType: 'blob',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                });
-                setPdfData(response.data);
-            } catch (err) {
-                console.error("Error fetching PDF via proxy:", err);
-                setError('Could not load the PDF file. Please check the URL or network connection.');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        
-        if (fileUrl) {
-            fetchPdfWithProxy();
-        }
-    }, [fileUrl]);
-
-    useEffect(() => {
-        const updateWidth = () => {
-            if (containerRef.current) {
-                setContainerWidth(containerRef.current.offsetWidth);
-            }
-        };
-        window.addEventListener('resize', updateWidth);
-        updateWidth();
-        return () => window.removeEventListener('resize', updateWidth);
-    }, []);
-
-    function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
-        setNumPages(numPages);
-    }
-    
-    if (isLoading) {
-        return (
-            <div className="w-full h-[85vh] flex justify-center items-center bg-gray-200">
-                <Loader2 className="animate-spin text-gray-700" size={48} />
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="w-full h-[85vh] flex flex-col justify-center items-center bg-red-100 text-center p-4">
-                <AlertTriangle className="text-red-500 mb-4" size={48} />
-                <p className="text-red-700 font-semibold">{error}</p>
-            </div>
-        );
-    }
-
-    return (
-        <div ref={containerRef} className="w-full h-[85vh] bg-gray-200 overflow-y-auto flex justify-center">
-            {pdfData && (
-                <Document
-                    file={pdfData}
-                    onLoadSuccess={onDocumentLoadSuccess}
-                >
-                    {Array.from(new Array(numPages || 0), (el, index) => (
-                        <Page
-                            key={`page_${index + 1}`}
-                            pageNumber={index + 1}
-                            renderAnnotationLayer={false}
-                            renderTextLayer={false}
-                            width={containerWidth > 0 ? containerWidth : undefined}
-                        />
-                    ))}
-                </Document>
-            )}
-        </div>
-    );
-};
+import { Video, Music, BookText, PlayCircle } from 'lucide-react';
 
 const CourseContentView: React.FC<{ course: FullCourse }> = ({ course }) => {
     const [activeContent, setActiveContent] = useState<ContentItem | null>(
@@ -165,7 +66,14 @@ const CourseContentView: React.FC<{ course: FullCourse }> = ({ course }) => {
                         </div>
                     )}
                     {activeContent?.ebookFileUrl && (
-                        <PdfViewer key={activeContent._id} fileUrl={activeContent.ebookFileUrl} />
+                        <div className="w-full h-[85vh] bg-white">
+                            <iframe
+                                key={activeContent._id}
+                                src={`https://docs.google.com/gview?url=${activeContent.ebookFileUrl}&embedded=true`}
+                                title={activeContent.title}
+                                className="w-full h-full border-0"
+                            />
+                        </div>
                     )}
                     {!activeContent && (
                         <div className="aspect-video flex items-center justify-center bg-dark-main">
