@@ -67,6 +67,7 @@ const LiveSessionPlayerPage: React.FC = () => {
                         controls
                         muted
                         className="w-full h-full"
+                        controlsList="nodownload"
                         onLoadedMetadata={handleMetadataLoad}
                         onError={(e) => console.error('HTML Video Player Error:', e)}
                     />
