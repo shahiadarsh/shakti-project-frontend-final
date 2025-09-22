@@ -54,6 +54,7 @@ const DailyVideoPlayer: React.FC = () => {
                         src={currentVideo.videoFileUrl}
                         controls
                         onLoadedMetadata={handleVideoMetadataLoaded}
+                        controlsList="nodownload"
                         className="w-full h-full"
                     >
                         Your browser does not support the video tag.
