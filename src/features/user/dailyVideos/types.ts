@@ -3,12 +3,12 @@ export interface DailyVideo {
     title: string;
     description: string;
     videoFileUrl: string;
-    scheduledUnlockTime: string;
-    unlocksOn: string;
+    sequenceOrder: number;
 }
 
 export interface DailyVideoState {
     videos: DailyVideo[];
+    totalUnlocked: number;
     isLoading: boolean;
     error: string | null;
 }
