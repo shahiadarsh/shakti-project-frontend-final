@@ -4,39 +4,42 @@ import api from '../../app/api';
 import { Ebook, EbookState } from './types';
 
 export const fetchEbooks = createAsyncThunk(
-    'ebooks/fetchAll', 
+    'ebooks/fetchAll',
     async (_, { rejectWithValue }) => {
         try {
             const { data } = await api.get<{ ebooks: Ebook[] }>('/admin/ebooks');
             return data.ebooks;
-        } catch (error: any) { 
-            return rejectWithValue('Failed to fetch ebooks.'); 
+        } catch (error: any) {
+            const message = error.response?.data?.message || 'Failed to fetch ebooks.';
+            return rejectWithValue(message);
         }
     }
 );
 
 export const addEbook = createAsyncThunk(
-    'ebooks/add', 
+    'ebooks/add',
     async (ebookData: FormData, { rejectWithValue }) => {
         try {
             const { data } = await api.post<{ ebook: Ebook }>('/admin/ebooks', ebookData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             return data.ebook;
-        } catch (error: any) { 
-            return rejectWithValue('Failed to add ebook.'); 
+        } catch (error: any) {
+            const message = error.response?.data?.message || 'Failed to add ebook.';
+            return rejectWithValue(message);
         }
     }
 );
 
 export const deleteEbook = createAsyncThunk(
-    'ebooks/delete', 
+    'ebooks/delete',
     async (ebookId: string, { rejectWithValue }) => {
         try {
             await api.delete(`/admin/ebooks/${ebookId}`);
             return ebookId;
-        } catch (error: any) { 
-            return rejectWithValue('Failed to delete ebook.'); 
+        } catch (error: any) {
+            const message = error.response?.data?.message || 'Failed to delete ebook.';
+            return rejectWithValue(message);
         }
     }
 );
