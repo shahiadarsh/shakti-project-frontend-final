@@ -4,39 +4,42 @@ import api from '../../app/api';
 import { Audio, AudioState } from './types';
 
 export const fetchAudios = createAsyncThunk(
-    'audios/fetchAll', 
+    'audios/fetchAll',
     async (_, { rejectWithValue }) => {
         try {
             const { data } = await api.get<{ audios: Audio[] }>('/admin/audios');
             return data.audios;
-        } catch (error: any) { 
-            return rejectWithValue('Failed to fetch audios.'); 
+        } catch (error: any) {
+            const message = error.response?.data?.message || 'Failed to fetch audios.';
+            return rejectWithValue(message);
         }
     }
 );
 
 export const addAudio = createAsyncThunk(
-    'audios/add', 
+    'audios/add',
     async (audioData: FormData, { rejectWithValue }) => {
         try {
             const { data } = await api.post<{ audio: Audio }>('/admin/audios', audioData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             return data.audio;
-        } catch (error: any) { 
-            return rejectWithValue('Failed to add audio.'); 
+        } catch (error: any) {
+            const message = error.response?.data?.message || 'Failed to add audio.';
+            return rejectWithValue(message);
         }
     }
 );
 
 export const deleteAudio = createAsyncThunk(
-    'audios/delete', 
+    'audios/delete',
     async (audioId: string, { rejectWithValue }) => {
         try {
             await api.delete(`/admin/audios/${audioId}`);
             return audioId;
-        } catch (error: any) { 
-            return rejectWithValue('Failed to delete audio.'); 
+        } catch (error: any) {
+            const message = error.response?.data?.message || 'Failed to delete audio.';
+            return rejectWithValue(message);
         }
     }
 );
