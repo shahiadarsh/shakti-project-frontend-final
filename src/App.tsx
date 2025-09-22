@@ -1,10 +1,12 @@
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route } from "react-router-dom";
 import VideoManagementPage from "./pages/VideoManagementPage";
-import LiveStreamManagementPage from "./pages/LiveStreamManagementPage"; // BrowserRouter removed from here
+import LiveStreamManagementPage from "./pages/LiveStreamManagementPage";
 
 import Index from "./pages/Index";
 import { About } from "./pages/About";
@@ -29,7 +31,7 @@ import SettingsPage from "./pages/SettingsPage";
 import UserLayout from "./components/layout/UserLayout";
 import ProtectedUserRoute from "./routes/ProtectedUserRoute";
 import UserDashboardPage from "./pages/user/UserDashboardPage";
-import UserCoursesPage from './pages/user/UserCoursesPage'; // <-- Import
+import UserCoursesPage from './pages/user/UserCoursesPage';
 import FullAccessRoute from './routes/FullAccessRoute';
 import UserCourseDetailPage from './pages/user/UserCourseDetailPage';
 import UserLiveSessionsPage from './pages/user/UserLiveSessionsPage';
@@ -44,11 +46,20 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      {/* --- THE FIX IS HERE --- */}
-      {/* The <BrowserRouter> component has been removed from this file. */}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <Routes>
         <Route path="/" element={<Index />} />
-        {/* <Route path="/dashboard" element={<UserDashboard />} /> */}
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/privacy" element={<Privacy />} />
@@ -73,7 +84,6 @@ const App = () => (
             </ProtectedRoute>
           }
         >
-          {/* --- This is the route for our new dashboard page --- */}
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="courses" element={<CourseManagementPage />} />
           <Route path="content/videos" element={<VideoManagementPage />} />
@@ -82,10 +92,7 @@ const App = () => (
           <Route path="livestreams" element={<LiveStreamManagementPage />} />
           <Route path="users" element={<UserManagementPage />} />
           <Route path="settings" element={<SettingsPage />} />
-          {/* Aap yahan par aur admin routes add karenge, jaise courses, users, etc. */}
         </Route>
-
-        {/* user-dashboard */}
 
         <Route
           element={
@@ -111,7 +118,6 @@ const App = () => (
               </FullAccessRoute>
             } 
           />
-
           <Route 
             path="/user/live-sessions" 
             element={
@@ -123,12 +129,7 @@ const App = () => (
           <Route path="/my-account/subscription" element={<UserSubscriptionPage />} />
           <Route path="/my-account/profile" element={<UserProfilePage />} />
           <Route path="/live-sessions/:streamId" element={<LiveSessionPlayerPage />} />
-          {/* <Route path="/live-sessions" element={<UserLiveSessionsPage />} /> */}
-          {/* <Route path="/my-account/subscription" element={<UserSubscriptionPage />} /> */}
-          {/* Add other user routes like /my-account/profile here */}
         </Route>
-
-        {/* <Route path="/dashboard" element={<UserDashboardPage />} /> */}
 
         <Route path="*" element={<NotFound />} />
       </Routes>
