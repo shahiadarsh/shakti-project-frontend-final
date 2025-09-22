@@ -4,39 +4,42 @@ import api from '../../app/api';
 import { Video, VideoState } from './types';
 
 export const fetchVideos = createAsyncThunk(
-    'videos/fetchAll', 
+    'videos/fetchAll',
     async (_, { rejectWithValue }) => {
         try {
             const { data } = await api.get<{ videos: Video[] }>('/admin/videos');
             return data.videos;
-        } catch (error: any) { 
-            return rejectWithValue('Failed to fetch videos.'); 
+        } catch (error: any) {
+            const message = error.response?.data?.message || 'Failed to fetch videos.';
+            return rejectWithValue(message);
         }
     }
 );
 
 export const addVideo = createAsyncThunk(
-    'videos/add', 
+    'videos/add',
     async (videoData: FormData, { rejectWithValue }) => {
         try {
             const { data } = await api.post<{ video: Video }>('/admin/videos', videoData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             return data.video;
-        } catch (error: any) { 
-            return rejectWithValue('Failed to add video.'); 
+        } catch (error: any) {
+            const message = error.response?.data?.message || 'Failed to add video.';
+            return rejectWithValue(message);
         }
     }
 );
 
 export const deleteVideo = createAsyncThunk(
-    'videos/delete', 
+    'videos/delete',
     async (videoId: string, { rejectWithValue }) => {
         try {
             await api.delete(`/admin/videos/${videoId}`);
             return videoId;
-        } catch (error: any) { 
-            return rejectWithValue('Failed to delete video.'); 
+        } catch (error: any) {
+            const message = error.response?.data?.message || 'Failed to delete video.';
+            return rejectWithValue(message);
         }
     }
 );
