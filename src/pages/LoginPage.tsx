@@ -1,79 +1,25 @@
 import React, { useState, useEffect, FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAppDispatch, useAppSelector } from '../hooks/typedHooks';
 import { loginAdmin } from '../features/auth/authSlice';
-import logo from "@/assets/Home 1.png";
+import logo from '../assets/logo.png';
 import mandalaPattern from '../assets/mandala-pattern.png';
-import { AtSign, Phone, Lock } from 'lucide-react';
+import { AtSign, Phone, Lock, User as UserIcon } from 'lucide-react';
 
 const LoginPage: React.FC = () => {
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [mobileNumber, setMobileNumber] = useState('');
-    const [emailError, setEmailError] = useState('');
-    const [mobileError, setMobileError] = useState('');
     
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     
     const { user, isLoading, error } = useAppSelector((state) => state.auth);
 
-    // Validation functions
-    const validateEmail = (email: string) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    };
-
-    const validateMobile = (mobile: string) => {
-        const mobileRegex = /^[6-9]\d{9}$/;
-        return mobileRegex.test(mobile);
-    };
-
-    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setEmail(value);
-        if (value && !validateEmail(value)) {
-            setEmailError('Please enter a valid email address');
-        } else {
-            setEmailError('');
-        }
-    };
-
-    const handleMobileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.replace(/\D/g, ''); // Remove non-digits
-        setMobileNumber(value);
-        if (value && !validateMobile(value)) {
-            setMobileError('Please enter a valid 10-digit mobile number starting with 6-9');
-        } else {
-            setMobileError('');
-        }
-    };
-
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
-        // Clear previous errors
-        setEmailError('');
-        setMobileError('');
-        
-        // Validate inputs
-        let hasError = false;
-        
-        if (!validateEmail(email)) {
-            setEmailError('Please enter a valid email address');
-            hasError = true;
-        }
-        
-        if (!validateMobile(mobileNumber)) {
-            setMobileError('Please enter a valid 10-digit mobile number starting with 6-9');
-            hasError = true;
-        }
-        
-        if (hasError) {
-            return;
-        }
-        
-        dispatch(loginAdmin({ email, mobileNumber }));
+        dispatch(loginAdmin({ name, email, mobileNumber }));
     };
 
     useEffect(() => {
@@ -82,8 +28,6 @@ const LoginPage: React.FC = () => {
                 navigate('/admin/dashboard', { replace: true });
             } else if (user.role === 'USER') {
                 navigate('/dashboard', { replace: true });
-            } else {
-                console.error("Unknown user role:", user.role);
             }
         }
     }, [user, navigate]);
@@ -114,64 +58,46 @@ const LoginPage: React.FC = () => {
                             className="h-24 w-24 mx-auto mb-4"
                         />
                         <h1 className="text-3xl font-bold text-admin-primary">Shaktipeeth Portal</h1>
-                        <p className="text-text-secondary mt-2">Sign in to continue your journey.</p>
+                        <p className="text-text-secondary mt-2">Sign in or create your account.</p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="relative">
+                            <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" size={20} />
+                            <input
+                                type="text"
+                                className="w-full pl-10 pr-4 py-3 bg-transparent border border-border-color rounded-lg text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-admin-primary transition-colors"
+                                placeholder="Full Name (for new users)"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                aria-label="Full Name"
+                            />
+                        </div>
+                        <div className="relative">
                             <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" size={20} />
                             <input
                                 type="email"
-                                className={`w-full pl-10 pr-4 py-3 bg-transparent border rounded-lg text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 transition-colors ${
-                                    emailError ? 'border-error-color focus:ring-error-color' : 'border-border-color focus:ring-admin-primary'
-                                }`}
+                                className="w-full pl-10 pr-4 py-3 bg-transparent border border-border-color rounded-lg text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-admin-primary transition-colors"
                                 placeholder="Email Address"
                                 value={email}
-                                onChange={handleEmailChange}
+                                onChange={(e) => setEmail(e.target.value)}
                                 required
                                 aria-label="Email Address"
                             />
-                            {emailError && (
-                                <motion.p 
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="text-error-color text-xs mt-1"
-                                >
-                                    {emailError}
-                                </motion.p>
-                            )}
                         </div>
 
                         <div className="relative">
                             <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" size={20} />
                             <input
                                 type="tel"
-                                className={`w-full pl-10 pr-4 py-3 bg-transparent border rounded-lg text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 transition-colors ${
-                                    mobileError ? 'border-error-color focus:ring-error-color' : 'border-border-color focus:ring-admin-primary'
-                                }`}
-                                placeholder="Mobile Number (10 digits)"
+                                className="w-full pl-10 pr-4 py-3 bg-transparent border border-border-color rounded-lg text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-admin-primary transition-colors"
+                                placeholder="Mobile Number"
                                 value={mobileNumber}
-                                onChange={handleMobileChange}
-                                maxLength={10}
+                                onChange={(e) => setMobileNumber(e.target.value)}
                                 required
                                 aria-label="Mobile Number"
                             />
-                            {mobileError && (
-                                <motion.p 
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="text-error-color text-xs mt-1"
-                                >
-                                    {mobileError}
-                                </motion.p>
-                            )}
                         </div>
-
-                        {/* <div className="text-right">
-                            <Link to="/forgot-password" className="text-sm font-medium text-admin-primary hover:underline">
-                                Forgot Details?
-                            </Link>
-                        </div> */}
 
                         {error && (
                             <motion.p 
@@ -186,24 +112,23 @@ const LoginPage: React.FC = () => {
                         <div>
                             <button 
                                 type="submit" 
+                                className="w-full flex items-center justify-center gap-2 px-4 py-3 font-semibold text-white bg-admin-primary rounded-lg hover:bg-admin-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-primary focus:ring-offset-dark-surface disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200" 
                                 disabled={isLoading}
-                                className="w-full flex items-center justify-center gap-2 px-4 py-3 " 
-                                
                             >
                                 {isLoading ? (
                                     <>
                                         <motion.div
-                                            className="w-5 h-5 rounded-full"
+                                            className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
                                             animate={{ rotate: 360 }}
                                             transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                                         />
                                         <span>Authenticating...</span>
                                     </>
                                 ) : (
-                                    <div className="flex items-center gap-2 border border-white rounded-lg px-4 py-2">
+                                    <>
                                         <Lock size={18} />
-                                        <span>Sign In</span>
-                                    </div>
+                                        <span>Continue</span>
+                                    </>
                                 )}
                             </button>
                         </div>
